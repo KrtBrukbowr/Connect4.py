@@ -38,6 +38,32 @@ def get_next_open_row(board, col):
 def print_board(board):
     print(np.flip(board, 0)) # Flips the board \ otherwise game starts at (0,0) axis which is top left
 
+def connect_four(board, piece):
+    # Horizontal game board check for connect four
+    for c in range(COL - 3):
+        for r in range(ROW):
+            if board[r][c] == piece and board[r][c+1] == piece and board[r][c+2] == piece and board[r][c+3] == piece:
+                return True
+    
+    # Vertical game board check for connect four
+    for c in range(COL):
+        for r in range(ROW - 3):
+            if board[r][c] == piece and board[r+1][c] == piece and board[r+2][c] == piece and board[r+3][c] == piece:
+                return True
+
+    # Diagonal UP board check for connect four
+    for c in range(COL - 3):
+        for r in range(ROW - 3):
+            if board[r][c] == piece and board[r+1][c+1] == piece and board[r+2][c+2] == piece and board[r+3][c+3] == piece:
+                return True
+    
+    # Diagonal DOWN  board check for connect four
+    for c in range(COL - 3):
+        for r in range(3, ROW):
+            if board[r][c] == piece and board[r-1][c+1] == piece and board[r-2][c+2] == piece and board[r-3][c+3] == piece:
+                return True
+
+
 board = game_board()
 print_board(board)
 game_over = False
@@ -52,6 +78,11 @@ while not game_over:
             row = get_next_open_row(board, col)
             drop(board,row,col,1)
 
+            if connect_four(board, 1):
+                print("Player 1 Wins !! ")
+                game_over = True
+                break
+
     else:
         # Prompt Plqyer 2 input
         col = int(input("Player 2 make your selection (0-6) "))
@@ -59,6 +90,11 @@ while not game_over:
         if valid_location(board, col):
             row = get_next_open_row(board, col)
             drop(board,row,col,2)
+
+            if connect_four(board, 1):
+                print("Player 1 Wins !! ")
+                game_over = True
+                break
 
     turn += 1
     turn = turn % 2
